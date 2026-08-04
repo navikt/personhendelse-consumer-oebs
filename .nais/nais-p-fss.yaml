@@ -2,7 +2,7 @@ apiVersion: nais.io/v1alpha1
 kind: Application
 
 metadata:
-  name: personhendelse-consumer-oebs
+  name: oebs-nomhendelser
   namespace: team-oebs
   labels:
     team: team-oebs
@@ -10,14 +10,8 @@ metadata:
 spec:
   image: {{ image }}
   port: 8080
-
   envFrom:
-    - secret: personhendelse-consumer-oebs
-    - secret: personhendelse-consumer-oebs-oracle
-  env:
-    - name: SPRING_PROFILES_ACTIVE
-      value: gcp
-
+    - secret: oebs-nomhendelser
   replicas:
     min: 2
     max: 2
@@ -52,3 +46,6 @@ spec:
     autoInstrumentation:
       enabled: true
       runtime: java
+
+  ingresses:
+    - "https://oebs-nomhendelser.intern.nav.no"

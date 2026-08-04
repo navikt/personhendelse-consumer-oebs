@@ -9,8 +9,8 @@ on:
       - main
   workflow_dispatch:
     inputs:
-      deploy_prod:
-        description: 'Deploy to production'
+      deploy_prod_fss:
+        description: 'Deploy to production in fss cluster'
         required: true
         type: boolean
         default: false
@@ -88,10 +88,10 @@ jobs:
           RESOURCE: .nais/nais-q1.yaml
           VAR: image=${{ needs.build.outputs.image }}
 
-  deploy-prod:
+  deploy-prod-fss:
     name: Deploy to prod
     needs: [build, deploy-t1, deploy-q1]
-    if: github.event_name == 'workflow_dispatch' && inputs.deploy_prod == true
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy_prod_fss == true
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -103,5 +103,23 @@ jobs:
       - uses: nais/deploy/actions/deploy@5fdd91aaf69bb0d6dd5e5118cdacb639f487b93b
         env:
           CLUSTER: prod-fss
+          RESOURCE: .nais/nais-p-fss.yaml
+          VAR: image=${{ needs.build.outputs.image }}
+
+  deploy-prod:
+    name: Deploy to prod
+    needs: [ build, deploy-t1, deploy-q1 ]
+    if: github.event_name != 'pull_request' && github.ref_name == 'main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    environment: prod
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+
+      - uses: nais/deploy/actions/deploy@5fdd91aaf69bb0d6dd5e5118cdacb639f487b93b
+        env:
+          CLUSTER: prod-gcp
           RESOURCE: .nais/nais-p.yaml
           VAR: image=${{ needs.build.outputs.image }}
