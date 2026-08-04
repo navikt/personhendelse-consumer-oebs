@@ -89,7 +89,7 @@ jobs:
           VAR: image=${{ needs.build.outputs.image }}
 
   deploy-prod-fss:
-    name: Deploy to prod
+    name: Deploy to prod fss
     needs: [build, deploy-t1, deploy-q1]
     if: github.event_name == 'workflow_dispatch' && inputs.deploy_prod_fss == true
     runs-on: ubuntu-latest
@@ -107,7 +107,7 @@ jobs:
           VAR: image=${{ needs.build.outputs.image }}
 
   deploy-prod:
-    name: Deploy to prod
+    name: Deploy personhendelse-consumer-oebs
     needs: [ build, deploy-t1, deploy-q1 ]
     if: github.event_name != 'pull_request' && github.ref_name == 'main'
     runs-on: ubuntu-latest
