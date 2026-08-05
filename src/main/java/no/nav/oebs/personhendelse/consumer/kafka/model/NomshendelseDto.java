@@ -1,0 +1,28 @@
+package no.nav.oebs.personhendelse.consumer.kafka.model;
+
+import java.time.LocalDateTime;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+/**
+ * Klasse for en intern representasjon av en mottatt nomshendelse-melding fra Kafka.
+ */
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@ToString
+public class NomshendelseDto {
+	
+	private String hendelseId;
+	
+	private LocalDateTime hendelseTimestamp;
+
+	private String fodselsnr;
+
+	private String hendelseAsJson;
+}

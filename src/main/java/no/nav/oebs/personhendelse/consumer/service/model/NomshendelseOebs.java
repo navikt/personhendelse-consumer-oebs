@@ -1,0 +1,22 @@
+package no.nav.oebs.personhendelse.consumer.service.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+/**
+ * Klasse som representerer JSON-dataene i en nomshendelse som sendes til Oebs.
+ */
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@ToString
+public class NomshendelseOebs {
+
+	private String fodselsnr;
+
+	private boolean status;
+}
