@@ -1,11 +1,11 @@
-# oebs-nomhendelser
+# personhendelse-consumer-oebs
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=navikt_oebs-nomhendelser&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=navikt_oebs-nomhendelser)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=navikt_oebs-nomhendelser&metric=coverage)](https://sonarcloud.io/summary/new_code?id=navikt_oebs-nomhendelser)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=navikt_oebs-nomhendelser&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=navikt_oebs-nomhendelser)  
 
 Kafka consumer service that processes employee shielding events from NOM and life events from PDL, and stores them in the OEBS Oracle database.
-The service runs in sikker sone (FSS) and consumes two Kafka topics:
+The service runs in gcp and consumes two Kafka topics:
 - **NOM hendelser** (`nom.skjermede-personer-status-v1`) — status changes for shielded NAV employees
 - **Livshendelser** (`pdl.leesah-v1`) — life events from PDL (Folkeregisteret), such as address changes, deaths, and births
 
@@ -30,8 +30,8 @@ including Kafka metadata such as topic, partition, offset, and timestamp.
 
 The service runs with three instances: t1, q1, and prod.
 
-- **t1** and **q1** run in `dev-fss`, reading topic from pool `nav-dev` in `dev-gcp`
-- **prod** runs in `prod-fss`, eading topic from pool `nav-prod` in `prod-gcp`
+- **t1** and **q1** run in `dev-gcp`, reading topic from pool `nav-dev` in `dev-gcp`
+- **prod** runs in `prod-gcp`, eading topic from pool `nav-prod` in `prod-gcp`
 
 Deployment order: **t1 → q1 → prod**. Production deployment requires manual trigger via `workflow_dispatch`.
 
@@ -100,9 +100,9 @@ Unit tests are set up using JUnit and Mockito.
 No alerting is currently configured. Issues must be detected by observing the event processing status in the OEBS database, or through errors reported by teams depending on the data.
 
 Standard application monitoring is available via Grafana dashboards:
-- [Grafana dashboard for t1](https://grafana.nav.cloud.nais.io/a/nais-apm-app/services/team-oebs/oebs-nomhendelser-t1?namespace=team-oebs&environment=dev-fss)
-- [Grafana dashboard for q1](https://grafana.nav.cloud.nais.io/a/nais-apm-app/services/team-oebs/oebs-nomhendelser-q1?namespace=team-oebs&environment=dev-fss)
-- [Grafana dashboard for prod](https://grafana.nav.cloud.nais.io/a/nais-apm-app/services/team-oebs/oebs-nomhendelser?namespace=team-oebs&environment=prod-fss)
+- [Grafana dashboard for t1](https://grafana.nav.cloud.nais.io/a/nais-apm-app/services/team-oebs/personhendelse-consumer-oebs-t1?namespace=team-oebs&environment=dev-gcp)
+- [Grafana dashboard for q1](https://grafana.nav.cloud.nais.io/a/nais-apm-app/services/team-oebs/personhendelse-consumer-oebs-q1?namespace=team-oebs&environment=dev-gcp)
+- [Grafana dashboard for prod](https://grafana.nav.cloud.nais.io/a/nais-apm-app/services/team-oebs/personhendelse-consumer-oebs?namespace=team-oebs&environment=prod-gcp)
 
 ---
 

@@ -8,7 +8,7 @@ spring:
     driver-class-name: oracle.jdbc.OracleDriver
     username: ${OEBS_USERNAME}
     password: ${OEBS_PASSWORD}
-    url: ${OEBS_URL}
+    url: ${ORACLE_URL}
   jpa:
     hibernate:
       ddl-auto: none

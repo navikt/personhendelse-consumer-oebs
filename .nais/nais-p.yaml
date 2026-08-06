@@ -14,9 +14,6 @@ spec:
   envFrom:
     - secret: personhendelse-consumer-oebs
     - secret: personhendelse-consumer-oebs-oracle
-  env:
-    - name: SPRING_PROFILES_ACTIVE
-      value: gcp
 
   replicas:
     min: 2
