@@ -9,7 +9,7 @@ spec:
   groups:
     - name: personhendelse-consumer-oebs
       rules:
-        - alert: test alert will always trigger
+        - alert: test alert for personhendelse-consumer that will always trigger
           expr: container_memory_working_set_bytes{namespace="team-oebs", container="personhendelse-consumer-oebs"} > 99
           for: 1m
           annotations:
