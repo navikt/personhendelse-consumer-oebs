@@ -1,0 +1,24 @@
+apiVersion: "monitoring.coreos.com/v1"
+kind: PrometheusRule
+metadata:
+  name: personhendelse-consumer-oebs
+  namespace: team-oebs
+  labels:
+    team: team-oebs
+spec:
+  groups:
+    - name: personhendelse-consumer-oebs
+      rules:
+        - alert: test alert will always trigger
+          expr: container_memory_working_set_bytes{namespace="team-oebs", container="personhendelse-consumer-oebs"} > 99
+          for: 1m
+          annotations:
+            consequence: "_*{{ $labels.container }}*_ has a working set of {{ $value }} bytes, there is no consequence"
+            action: "no need to do _anything_"
+            documentation: "https://prometheus.io/docs/prometheus/latest/querying/basics/"
+            summary: "Container _*{{ $labels.container }}*_ has a working set of {{ $value }} bytes."
+            sla: "no need to respond"
+          labels:
+            severity: "info"
+            special_type_to_use_in_alertmanager_config: team-oebs-alerts
+            alert_type: custom
