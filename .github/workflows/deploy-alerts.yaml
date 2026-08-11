@@ -1,0 +1,65 @@
+name: Deploy alerts to NAIS for personhendelse-consumer-oebs
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .nais/alertconfig.yaml
+      - .nais/prometheusrule.yaml
+      - .github/workflows/deploy-alerts.yaml
+#  workflow_dispatch:
+#    inputs:
+#      environment:
+#        type: choice
+#        description: Environment
+#        required: true
+#        default: u1
+#        options:
+#          - u1
+#          - q1
+#          - prod
+
+jobs:
+  apply-alerts:
+    name: Apply alerts to cluster
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+#      - name: Detect changed alert files
+#        id: changed
+#        if: github.event_name == 'push'
+#        shell: bash
+#        run: |
+#          base="${{ github.event.before }}"
+#          if [ "$base" = "0000000000000000000000000000000000000000" ]; then
+#            base="$(git rev-list --max-parents=0 HEAD)"
+#          fi
+#
+#          changed_files="$(git diff --name-only "$base" "${{ github.sha }}")"
+#          echo "$changed_files"
+#
+#          u1=false
+#          q1=false
+#          prod=false
+#
+#          echo "$changed_files" | grep -qx '.nais/alert-u1.yaml' && u1=true || true
+#          echo "$changed_files" | grep -qx '.nais/alert-q1.yaml' && q1=true || true
+#          echo "$changed_files" | grep -qx '.nais/alert-p.yaml' && prod=true || true
+#
+#          echo "u1=$u1" >> "$GITHUB_OUTPUT"
+#          echo "q1=$q1" >> "$GITHUB_OUTPUT"
+#          echo "prod=$prod" >> "$GITHUB_OUTPUT"
+
+      - name: deploy alerts to dev-gcp
+        uses: nais/deploy/actions/deploy@a7f8690f9b367fcbf5348a0a1e21d44f1aae50eb
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/alertconfig.yaml,.nais/prometheusrule.yaml
