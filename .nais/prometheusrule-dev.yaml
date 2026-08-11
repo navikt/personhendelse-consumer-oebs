@@ -10,7 +10,7 @@ spec:
     - name: personhendelse-consumer-oebs-t1
       rules:
         - alert: PersonhendelseConsumerOebsKafkaLagPdl
-          expr: kafka_consumer_fetch_manager_records_lag_max{namespace="team-oebs", container="personhendelse-consumer-oebs-", client_id="personhendelse-consumer-oebs-t1-0"} > 1000
+          expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs-t1", topic="pdl.leesah-v1"}) > 1000
           for: 5m
           annotations:
             summary: "Kafka consumer lag is high for pdl.leesah-v1 ({{ $value }} messages)"
@@ -24,7 +24,7 @@ spec:
             alert_type: custom
 
         - alert: PersonhendelseConsumerOebsKafkaLagNom
-          expr: kafka_consumer_fetch_manager_records_lag_max{namespace="team-oebs", container="personhendelse-consumer-oebs-t1", client_id="personhendelse-consumer-oebs-t1-0"} > 100
+          expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs-t1", topic="nom.skjermede-personer-status-v1"}) > 100
           for: 5m
           annotations:
             summary: "Kafka consumer lag is high for nom.skjermede-personer-status-v1 ({{ $value }} messages)"
