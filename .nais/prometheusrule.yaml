@@ -9,18 +9,6 @@ spec:
   groups:
     - name: personhendelse-consumer-oebs
       rules:
-        - alert: PersonhendelseConsumerOebsAlertTest
-          expr: vector(1) == 1
-          for: 1m
-          annotations:
-            summary: "Test alert — verify that Slack routing works"
-            consequence: "This is a test alert. No action needed."
-            action: "Delete or comment out this alert after verifying that it appears in Slack."
-          labels:
-            severity: warning
-            alert_routing_slack: team-oebs-alerts
-            alert_type: custom
-
         - alert: PersonhendelseConsumerOebsKafkaLagPdl
           expr: kafka_consumer_fetch_manager_records_lag_max{namespace="team-oebs", container="personhendelse-consumer-oebs", client_id="personhendelse-consumer-oebs-0"} > 1000
           for: 5m
