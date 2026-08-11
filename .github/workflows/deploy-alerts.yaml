@@ -4,6 +4,8 @@ on:
     branches:
       - main
     paths:
+      - .nais/alertconfig-dev.yaml
+      - .nais/prometheusrule-dev.yaml
       - .nais/alertconfig.yaml
       - .nais/prometheusrule.yaml
       - .github/workflows/deploy-alerts.yaml
@@ -62,4 +64,11 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
+          RESOURCE: .nais/alertconfig-dev.yaml,.nais/prometheusrule-dev.yaml
+
+      - name: deploy alerts to prod-gcp
+        uses: nais/deploy/actions/deploy@a7f8690f9b367fcbf5348a0a1e21d44f1aae50eb
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
           RESOURCE: .nais/alertconfig.yaml,.nais/prometheusrule.yaml

@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
-  name: personhendelse-consumer-oebs
+  name: personhendelse-consumer-oebs-dev
   namespace: team-oebs
   labels:
     alertmanagerConfig: personhendelse-consumer-oebs
@@ -10,14 +10,14 @@ spec:
     receiver: slack-notifications
     matchers:
       - name: alert_routing_slack
-        value: team-oebs-alerts
+        value: team-oebs-alerts-dev
   receivers:
     - name: slack-notifications
       slackConfigs:
         - apiURL:
             name: slack-webhook-secret
             key: webhookUrl
-          channel: "#team-oebs-alerts"
+          channel: "#team-oebs-alerts-dev"
           iconEmoji: ":test:"
           sendResolved: true
           title:  "🚨 {{ .GroupLabels.alertname }}"
