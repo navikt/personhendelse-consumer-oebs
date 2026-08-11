@@ -20,5 +20,5 @@ spec:
           channel: "#team-oebs-alerts"
           iconEmoji: ":test:"
           sendResolved: true
-          title: '🚨 {{ index .GroupLabels "alertname" }}'
+          title:  "🚨 {{ .GroupLabels.alertname }}"
           text: '{{ range .Alerts }}{{ .Annotations.summary }}{{ end }}'
