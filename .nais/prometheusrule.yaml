@@ -9,8 +9,8 @@ spec:
   groups:
     - name: personhendelse-consumer-oebs
       rules:
-        - alert: test alert for personhendelse-consumer that will always trigger
-          expr: container_memory_working_set_bytes{namespace="team-oebs", container="personhendelse-consumer-oebs"} > 99
+        - alert: test alert for personhendelse-consumer-t1 that will always trigger
+          expr: container_memory_working_set_bytes{namespace="team-oebs", container="personhendelse-consumer-oebs-t1"} > 99
           for: 1m
           annotations:
             consequence: "_*{{ $labels.container }}*_ has a working set of {{ $value }} bytes, there is no consequence"
