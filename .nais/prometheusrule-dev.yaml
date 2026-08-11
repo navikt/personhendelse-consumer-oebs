@@ -1,7 +1,7 @@
 apiVersion: "monitoring.coreos.com/v1"
 kind: PrometheusRule
 metadata:
-  name: personhendelse-consumer-oebs-dev
+  name: personhendelse-consumer-oebs
   namespace: team-oebs
   labels:
     team: team-oebs
@@ -9,16 +9,102 @@ spec:
   groups:
     - name: personhendelse-consumer-oebs-t1
       rules:
-        - alert: test alert for personhendelse-consumer-t1 that will always trigger
-          expr: container_memory_working_set_bytes{namespace="team-oebs", container="personhendelse-consumer-oebs-t1"} > 99
+        - alert: PersonhendelseConsumerOebsT1AlertTest
+          expr: vector(1) == 1
           for: 1m
           annotations:
-            consequence: "_*{{ $labels.container }}*_ has a working set of {{ $value }} bytes, there is no consequence"
-            action: "no need to do _anything_"
-            documentation: "https://prometheus.io/docs/prometheus/latest/querying/basics/"
-            summary: "Container _*{{ $labels.container }}*_ has a working set of {{ $value }} bytes."
-            sla: "no need to respond"
+            summary: "Test alert — verify that Slack routing works"
+            consequence: "This is a test alert. No action needed."
+            action: "Delete or comment out this alert after verifying that it appears in Slack."
           labels:
-            severity: "info"
+            severity: warning
+            alert_routing_slack: team-oebs-alerts-dev
+            alert_type: custom
+
+        - alert: PersonhendelseConsumerOebsKafkaLagPdl
+          expr: kafka_consumer_fetch_manager_records_lag_max{namespace="team-oebs", container="personhendelse-consumer-oebs-", client_id="personhendelse-consumer-oebs-t1-0"} > 1000
+          for: 5m
+          annotations:
+            summary: "Kafka consumer lag is high for pdl.leesah-v1 ({{ $value }} messages)"
+            consequence: "Life events from PDL are processed with delay — personal data not updated in OEBS"
+            action: "Check that the application is running and processing messages. Check logs for errors."
+            documentation: "https://prometheus.io/docs/prometheus/latest/querying/basics/"
+            sla: "Respond within 30 minutes during business hours"
+          labels:
+            severity: warning
+            alert_routing_slack: team-oebs-alerts-dev
+            alert_type: custom
+
+        - alert: PersonhendelseConsumerOebsKafkaLagNom
+          expr: kafka_consumer_fetch_manager_records_lag_max{namespace="team-oebs", container="personhendelse-consumer-oebs-t1", client_id="personhendelse-consumer-oebs-t1-0"} > 100
+          for: 5m
+          annotations:
+            summary: "Kafka consumer lag is high for nom.skjermede-personer-status-v1 ({{ $value }} messages)"
+            consequence: "NOM events (shielded persons) are processed with delay"
+            action: "Check that the application is running and processing messages. Check logs for errors."
+            documentation: "https://prometheus.io/docs/prometheus/latest/querying/basics/"
+            sla: "Respond within 30 minutes during business hours"
+          labels:
+            severity: warning
+            alert_routing_slack: team-oebs-alerts-dev
+            alert_type: custom
+
+        - alert: PersonhendelseConsumerOebsJvmHeapPressure
+          expr: >
+            jvm_memory_used_bytes{area="heap", namespace="team-oebs", container="personhendelse-consumer-oebs-t1"}
+            /
+            jvm_memory_max_bytes{area="heap", namespace="team-oebs", container="personhendelse-consumer-oebs-t1"}
+            > 0.85
+          for: 5m
+          annotations:
+            summary: "JVM heap usage is above 85% ({{ $value | humanizePercentage }})"
+            consequence: "Risk of OutOfMemoryError and pod crash"
+            action: "Check memory usage and consider increasing memory limits"
+            documentation: "https://prometheus.io/docs/prometheus/latest/querying/basics/"
+            sla: "Respond within 1 hour during business hours"
+          labels:
+            severity: warning
+            alert_routing_slack: team-oebs-alerts-dev
+            alert_type: custom
+
+        - alert: PersonhendelseConsumerOebsDatabaseConnectionsPending
+          expr: hikaricp_connections_pending{namespace="team-oebs", container="personhendelse-consumer-oebs-t1"} > 0
+          for: 2m
+          annotations:
+            summary: "Database connections are queued ({{ $value }} pending)"
+            consequence: "Events cannot be saved to Oracle — rolled back to Kafka topic"
+            action: "Check that the Oracle database is available. Check HikariCP configuration."
+            documentation: "https://prometheus.io/docs/prometheus/latest/querying/basics/"
+            sla: "Respond within 15 minutes"
+          labels:
+            severity: warning
+            alert_routing_slack: team-oebs-alerts-dev
+            alert_type: custom
+
+        - alert: PersonhendelseConsumerOebsPodRestarts
+          expr: increase(kube_pod_container_status_restarts_total{namespace="team-oebs", container="personhendelse-consumer-oebs-t1"}[1h]) > 2
+          for: 0m
+          annotations:
+            summary: "Pod has restarted {{ $value }} times in the last hour"
+            consequence: "Unstable application — may temporarily lose Kafka offset or database connection"
+            action: "Check pod logs for the cause of the crashes"
+            documentation: "https://prometheus.io/docs/prometheus/latest/querying/basics/"
+            sla: "Respond within 30 minutes during business hours"
+          labels:
+            severity: warning
+            alert_routing_slack: team-oebs-alerts-dev
+            alert_type: custom
+
+        - alert: PersonhendelseConsumerOebsErrorLogsHigh
+          expr: increase(logback_events_total{level="error", namespace="team-oebs", container="personhendelse-consumer-oebs-t1"}[5m]) > 3
+          for: 2m
+          annotations:
+            summary: "High rate of ERROR log messages ({{ $value }} in last 5 min)"
+            consequence: "Events may be failing during processing"
+            action: "Check application logs for the cause of the errors"
+            documentation: "https://prometheus.io/docs/prometheus/latest/querying/basics/"
+            sla: "Respond within 1 hour during business hours"
+          labels:
+            severity: warning
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
