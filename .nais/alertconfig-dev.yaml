@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
-  name: personhendelse-consumer-oebs-dev
+  name: personhendelse-consumer-oebs
   namespace: team-oebs
   labels:
     alertmanagerConfig: personhendelse-consumer-oebs
