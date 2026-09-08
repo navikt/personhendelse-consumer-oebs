@@ -9,6 +9,18 @@ spec:
   groups:
     - name: personhendelse-consumer-oebs
       rules:
+        - alert: PersonhendelseConsumerOebsInstanceDown
+          expr: kube_deployment_status_replicas_available{namespace="team-oebs", deployment="personhendelse-consumer-oebs"} == 0
+          for: 10m
+          annotations:
+            summary: "personhendelse-consumer-oebs has no available replicas"
+            consequence: "personhendelse-consumer-oebs is not available"
+            action: "Check deploy status and pods with kubectl describe deploy/pod and kubectl logs"
+          labels:
+            severity: warning
+            alert_routing_slack: team-oebs-alerts
+            alert_type: custom
+
         - alert: PersonhendelseConsumerOebsKafkaLagPdl
           expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs", topic="pdl.leesah-v1"}) > 1000
           for: 5m
