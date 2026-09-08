@@ -9,7 +9,7 @@ spec:
   groups:
     - name: personhendelse-consumer-oebs-t1
       rules:
-        - alert: PersonhendelseConsumerT1OebsInstanceDown
+        - alert: PersonhendelseConsumerOebsT1InstanceDown
           expr: kube_deployment_status_replicas_available{namespace="team-oebs", deployment="personhendelse-consumer-oebs-t1"} == 0
           for: 10m
           annotations:
@@ -21,7 +21,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerT1OebsKafkaLagPdl
+        - alert: PersonhendelseConsumerOebsT1KafkaLagPdl
           expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs-t1", topic="pdl.leesah-v1"}) > 1000
           for: 5m
           annotations:
@@ -35,7 +35,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerT1OebsKafkaLagNom
+        - alert: PersonhendelseConsumerOebsT1KafkaLagNom
           expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs-t1", topic="nom.skjermede-personer-status-v1"}) > 100
           for: 5m
           annotations:
@@ -49,7 +49,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerT1OebsJvmHeapPressure
+        - alert: PersonhendelseConsumerOebsT1JvmHeapPressure
           expr: >
             jvm_memory_used_bytes{area="heap", namespace="team-oebs", container="personhendelse-consumer-oebs-t1"}
             /
@@ -67,7 +67,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerT1OebsDatabaseConnectionsPending
+        - alert: PersonhendelseConsumerOebsT1DatabaseConnectionsPending
           expr: hikaricp_connections_pending{namespace="team-oebs", container="personhendelse-consumer-oebs-t1"} > 0
           for: 2m
           annotations:
@@ -81,7 +81,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerT1OebsPodRestarts
+        - alert: PersonhendelseConsumerOebsT1PodRestarts
           expr: increase(kube_pod_container_status_restarts_total{namespace="team-oebs", container="personhendelse-consumer-oebs-t1"}[1h]) > 2
           for: 0m
           annotations:
@@ -95,7 +95,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerT1OebsErrorLogsHigh
+        - alert: PersonhendelseConsumerOebsT1ErrorLogsHigh
           expr: increase(logback_events_total{level="error", namespace="team-oebs", container="personhendelse-consumer-oebs-t1"}[5m]) > 3
           for: 2m
           annotations:
@@ -111,7 +111,7 @@ spec:
 
     - name: personhendelse-consumer-oebs-q1
       rules:
-        - alert: PersonhendelseConsumerQ1OebsInstanceDown
+        - alert: PersonhendelseConsumerOebsQ1InstanceDown
           expr: kube_deployment_status_replicas_available{namespace="team-oebs", deployment="personhendelse-consumer-oebs-q1"} == 0
           for: 10m
           annotations:
@@ -123,7 +123,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerQ1OebsKafkaLagPdl
+        - alert: PersonhendelseConsumerOebsQ1KafkaLagPdl
           expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs-q1", topic="pdl.leesah-v1"}) > 1000
           for: 5m
           annotations:
@@ -137,7 +137,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerQ1OebsKafkaLagNom
+        - alert: PersonhendelseConsumerOebsQ1KafkaLagNom
           expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs-q1", topic="nom.skjermede-personer-status-v1"}) > 100
           for: 5m
           annotations:
@@ -151,7 +151,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerQ1OebsJvmHeapPressure
+        - alert: PersonhendelseConsumerOebsQ1JvmHeapPressure
           expr: >
             jvm_memory_used_bytes{area="heap", namespace="team-oebs", container="personhendelse-consumer-oebs-q1"}
             /
@@ -169,7 +169,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerQ1OebsDatabaseConnectionsPending
+        - alert: PersonhendelseConsumerOebsQ1DatabaseConnectionsPending
           expr: hikaricp_connections_pending{namespace="team-oebs", container="personhendelse-consumer-oebs-q1"} > 0
           for: 2m
           annotations:
@@ -183,7 +183,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerQ1OebsPodRestarts
+        - alert: PersonhendelseConsumerOebsQ1PodRestarts
           expr: increase(kube_pod_container_status_restarts_total{namespace="team-oebs", container="personhendelse-consumer-oebs-q1"}[1h]) > 2
           for: 0m
           annotations:
@@ -197,7 +197,7 @@ spec:
             alert_routing_slack: team-oebs-alerts-dev
             alert_type: custom
 
-        - alert: PersonhendelseConsumerQ1OebsErrorLogsHigh
+        - alert: PersonhendelseConsumerOebsQ1ErrorLogsHigh
           expr: increase(logback_events_total{level="error", namespace="team-oebs", container="personhendelse-consumer-oebs-q1"}[5m]) > 3
           for: 2m
           annotations:
