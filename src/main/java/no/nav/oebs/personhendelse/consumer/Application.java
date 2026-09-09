@@ -10,6 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application {
 
 	public static void main(String[] args) {
+		System.setProperty(
+				"org.apache.avro.SERIALIZABLE_PACKAGES",
+				"no.nav.person.pdl.leesah"
+		);
 		SpringApplication.run(Application.class, args);
 	}
 }
