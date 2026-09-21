@@ -36,7 +36,7 @@
         <logback-classic>1.5.16</logback-classic>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <org-codehaus-mojo-version>3.6.1</org-codehaus-mojo-version>
+        <org-codehaus-mojo-version>3.6.2</org-codehaus-mojo-version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <sonar-maven-plugin.version>4.0.0.4121</sonar-maven-plugin.version>
         <commons-lang3.version>3.20.0</commons-lang3.version>
