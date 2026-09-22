@@ -17,9 +17,9 @@ spec:
       enabled: true
       tenant: trygdeetaten.no
 
-    kafka:
-      pool:
-        nav-dev
+  kafka:
+    pool:
+      nav-dev
 
   envFrom:
     - secret: dependabot-oebs-t1
