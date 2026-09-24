@@ -1,0 +1,6 @@
+app:
+  kafka:
+    nomshendelse:
+      topic: dependabot-test-1.v1
+    livshendelse:
+      topic: dependabot-test-2.v1
