@@ -10,6 +10,10 @@ spec:
   image: {{image}}
   port: 8080
 
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: dependabot
+
   #ttl: 7m
 
   azure:
