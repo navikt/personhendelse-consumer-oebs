@@ -1,5 +1,6 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
+
 metadata:
   name: personhendelse-consumer-dependabot
   namespace: team-oebs
@@ -7,7 +8,7 @@ metadata:
     team: team-oebs
 
 spec:
-  image: {{image}}
+  image: {{ image }}
   port: 8080
 
   env:
@@ -16,49 +17,42 @@ spec:
 
   #ttl: 7m
 
+  envFrom:
+    - secret: dependabot-oebs-t1
+    - secret: personhendelse-consumer-dependabot-oracle
+
+  replicas:
+    min: 1
+    max: 1
+    cpuThresholdPercentage: 50
+  liveness:
+    path: /internal/isalive
+    initialDelay: 60
+    timeout: 10
+  readiness:
+    path: /internal/isready
+    initialDelay: 60
+    timeout: 10
+
+  resources:
+    limits:
+      memory: 768Mi
+    requests:
+      cpu: 200m
+      memory: 512Mi
+  prometheus:
+    enabled: true
+    path: /actuator/prometheus
+  kafka:
+    pool: nav-dev
+
   azure:
     application:
       enabled: true
       tenant: trygdeetaten.no
 
-  kafka:
-    pool:
-      nav-dev
-
-  envFrom:
-    - secret: dependabot-oebs-t1
-    - secret: personhendelse-consumer-dependabot-oracle
-
-  prometheus:
-    enabled: true
-    path: /api/v1/actuator/prometheus
-
-  liveness:
-    path: /api/v1/actuator/health/liveness
-    initialDelay: 60
-    periodSeconds: 10
-    failureThreshold: 3
-
-  readiness:
-    path: /api/v1/actuator/health/readiness
-    initialDelay: 60
-    periodSeconds: 10
-    failureThreshold: 3
-
-  resources:
-    requests:
-      cpu: 50m
-      memory: 256Mi
-    limits:
-      memory: 768Mi
-
-  replicas:
-    min: 1
-    max: 1
-    cpuThresholdPercentage: 80
-
   accessPolicy:
     inbound:
-      rules: []
+      rules: [ ]
     outbound:
-      external: []
+      external: [ ]
