@@ -15,7 +15,7 @@ spec:
     - name: SPRING_PROFILES_ACTIVE
       value: dependabot
 
-  #ttl: 7m
+  ttl: 6m
 
   envFrom:
     - secret: dependabot-oebs-t1
