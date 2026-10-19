@@ -82,7 +82,7 @@ spec:
             alert_type: custom
 
         - alert: PersonhendelseConsumerOebsPodRestarts
-          expr: increase(kube_pod_container_status_restarts_total{namespace="team-oebs", container="personhendelse-consumer-oebs"}[1h]) > 2
+          expr: increase(kube_pod_container_status_restarts_total{namespace="team-oebs", container="personhendelse-consumer-oebs"}[1h]) > 5
           for: 0m
           annotations:
             summary: "Pod has restarted {{ $value }} times in the last hour"
