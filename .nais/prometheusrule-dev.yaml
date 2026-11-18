@@ -22,7 +22,7 @@ spec:
             alert_type: custom
 
         - alert: PersonhendelseConsumerOebsT1KafkaLagPdl
-          expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs-t1", topic="pdl.leesah-v1"}) > 1000
+          expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs-t1", topic="pdl.leesah-v1"}) > 2500
           for: 5m
           annotations:
             summary: "Kafka consumer lag is high for pdl.leesah-v1 ({{ $value }} messages)"
@@ -124,7 +124,7 @@ spec:
             alert_type: custom
 
         - alert: PersonhendelseConsumerOebsQ1KafkaLagPdl
-          expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs-q1", topic="pdl.leesah-v1"}) > 1000
+          expr: sum(kafka_consumergroup_group_lag{group="personhendelse-consumer-oebs-q1", topic="pdl.leesah-v1"}) > 2500
           for: 5m
           annotations:
             summary: "Kafka consumer lag is high for pdl.leesah-v1 ({{ $value }} messages)"
